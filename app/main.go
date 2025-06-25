@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 
@@ -21,6 +22,11 @@ func main() {
 	if err != nil {
 		fmt.Println("Error accepting connection: ", err.Error())
 		os.Exit(2)
+	}
+
+	if _, err = conn.Read([]byte{}); err != nil {
+		log.Printf("Error reading connection:%v\n", err)
+		return
 	}
 
 	resp := kafka.NewResponse(7)
