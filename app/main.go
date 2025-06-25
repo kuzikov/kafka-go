@@ -25,13 +25,10 @@ func main() {
 	}
 
 	buf := make([]byte, 64)
-	msgLen := 0
-	if msgLen, err = conn.Read(buf); err != nil {
+	if _, err = conn.Read(buf); err != nil {
 		log.Printf("Error reading connection:%v\n", err)
 		return
 	}
-
-	fmt.Printf("read conn msg: `%v` with length: %d\n", buf[:msgLen], msgLen)
 
 	resp := kafka.NewResponse(7)
 	conn.Write(resp.Bytes())
