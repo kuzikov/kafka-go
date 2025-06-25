@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net"
 	"os"
+
+	"github.com/codecrafters-io/kafka-starter-go/kafka"
 )
 
 func main() {
@@ -14,9 +16,13 @@ func main() {
 		fmt.Println("Failed to bind to port 9092")
 		os.Exit(1)
 	}
-	_, err = l.Accept()
+
+	conn, err := l.Accept()
 	if err != nil {
 		fmt.Println("Error accepting connection: ", err.Error())
 		os.Exit(2)
 	}
+
+	resp := kafka.NewResponse(7)
+	conn.Write(resp.Bytes())
 }
