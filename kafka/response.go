@@ -8,18 +8,24 @@ import (
 
 const msgSize int32 = 4
 
+// `message_size`
+// `header v0`
+// `body`
 type Response struct {
-	// message_size
 	messageSize int32
-	// header v0
+	header      responseHeaderV0
+}
+
+type responseHeaderV0 struct {
 	correlationID int32
-	// body
 }
 
 func NewResponse(correlationID int32) *Response {
 	return &Response{
-		messageSize:   msgSize,
-		correlationID: correlationID,
+		messageSize: msgSize,
+		header: responseHeaderV0{
+			correlationID: correlationID,
+		},
 	}
 }
 
@@ -31,7 +37,7 @@ func (r *Response) Bytes() []byte {
 		log.Printf("Write message_size: %s\n", err.Error())
 	}
 
-	if err := binary.Write(buf, binary.BigEndian, r.correlationID); err != nil {
+	if err := binary.Write(buf, binary.BigEndian, r.header.correlationID); err != nil {
 		log.Printf("Write correlationID: %s\n", err.Error())
 	}
 
