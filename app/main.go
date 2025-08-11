@@ -2,10 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
-
-	"github.com/codecrafters-io/kafka-starter-go/kafka"
 )
 
 func main() {
@@ -22,14 +19,7 @@ func main() {
 		fmt.Println("Error accepting connection: ", err.Error())
 		return
 	}
-	defer conn.Close()
 
-	buf := make([]byte, 64)
-	if _, err = conn.Read(buf); err != nil {
-		log.Printf("Error reading connection:%v\n", err)
-		return
-	}
+	handleConn(conn)
 
-	resp := kafka.NewResponse(7)
-	conn.Write(resp.Bytes())
 }
